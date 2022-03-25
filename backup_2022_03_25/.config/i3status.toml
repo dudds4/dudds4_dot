@@ -1,0 +1,39 @@
+theme = "solarized-dark"
+icons = "awesome"
+
+[[block]]
+block = "disk_space"
+path = "/"
+alias = "/"
+info_type = "available"
+unit = "GB"
+interval = 20
+warning = 20.0
+alert = 10.0
+
+[[block]]
+block = "music"
+player= "spotify"
+buttons = ["play", "next"]
+
+[[block]]
+block = "battery"
+interval = 10
+format = "{percentage}% {time}"
+
+[[block]]
+block = "cpu"
+interval = 1
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "bluetooth"
+mac = "14:3F:A6:58:FB:58"
+label = "Sony XM4"
+
+[[block]]
+block = "time"
+interval = 60
+format = "%a %d/%m %R"
