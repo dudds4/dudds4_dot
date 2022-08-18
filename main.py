@@ -10,7 +10,9 @@ DOT_FILES = [
     "~/.config/nvim/init.vim",
     "~/.bashrc",
     "~/.zshrc",
-    "~/.config/alacritty/alacritty.yml"
+    "~/.config/alacritty/alacritty.yml",
+    "~/.config/kitty/kitty.conf",
+    "~/.config/kitty/current-theme.conf",
 ]
 
 def save(save_folder: str, dry_run: bool = True, is_backup: bool = False) -> None:
@@ -37,8 +39,10 @@ def save(save_folder: str, dry_run: bool = True, is_backup: bool = False) -> Non
         if is_backup:
             print(f"DOT file found at {full_src}, backing up")
 
-        print(f"Copying file from {full_src} -> {dst}")
-        if not dry_run:
+        if dry_run:
+            print(f"[DRY RUN] Copying file from {full_src} -> {dst}")
+        else:
+            print(f"Copying file from {full_src} -> {dst}")
             containing_dir, _ = os.path.split(dst)
             os.makedirs(containing_dir, exist_ok=True)
             shutil.copyfile(full_src, dst)
