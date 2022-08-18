@@ -13,6 +13,7 @@ DOT_FILES = [
     "~/.config/alacritty/alacritty.yml",
     "~/.config/kitty/kitty.conf",
     "~/.config/kitty/current-theme.conf",
+    "~/..tmux.conf",
 ]
 
 def save(save_folder: str, dry_run: bool = True, is_backup: bool = False) -> None:
