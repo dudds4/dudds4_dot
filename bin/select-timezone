@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+SELECTED=$(timedatectl list-timezones | rofi -dmenu -p 'Select timezone')
+echo "Setting timezone to $SELECTED"
+echo "Running: timedatectl set-timezone $SELECTED"
+timedatectl set-timezone $SELECTED
+
+notify-send "Updated timezone to $SELECTED.
+
+Note, i3bar may not update immediately.
+Refresh i3 with mod+Shift+r to see changes"

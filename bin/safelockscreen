@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+LAYOUT_STR=$(setxkbmap -query | grep layout | grep -E '\s([a-z,]+)' -o)
+setxkbmap -layout us
+blurlock
+setxkbmap -layout $LAYOUT_STR -option grp:win_space_toggle
