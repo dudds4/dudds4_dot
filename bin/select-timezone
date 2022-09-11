@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
 SELECTED=$(timedatectl list-timezones | rofi -dmenu -p 'Select timezone')
+
+if [[ $SELECTED = '' ]]; then
+    echo "No timezone selected, canceling..."
+    exit
+fi
+
 echo "Setting timezone to $SELECTED"
 echo "Running: timedatectl set-timezone $SELECTED"
 timedatectl set-timezone $SELECTED
