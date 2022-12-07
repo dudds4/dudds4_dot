@@ -5,17 +5,14 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# /usr/share/zsh/manjaro-zsh-config
-# /usr/share/zsh/manjaro-zsh-prompt
 # Source manjaro-zsh-configuration
-MANJARO_CONFIG=/home/dweisdorf/repos/dudds4_dot/dot_config/zsh/manjaro-zsh-config
-MANJARO_PROMPT=/home/dweisdorf/repos/dudds4_dot/dot_config/zsh/manjaro-zsh-prompt
-if [[ -e $MANJARO_CONFIG ]]; then
-    source $MANJARO_CONFIG
+if [[ -e /usr/share/zsh/manjaro-zsh-config ]]; then
+  source /usr/share/zsh/manjaro-zsh-config
 fi
+
 # Use manjaro zsh prompt
-if [[ -e $MANJARO_PROMPT ]]; then
-  source $MANJARO_PROMPT
+if [[ -e /usr/share/zsh/manjaro-zsh-prompt ]]; then
+  source /usr/share/zsh/manjaro-zsh-prompt
 fi
 
 # turns on keychain for ssh key management
@@ -69,7 +66,7 @@ alias sshtrajekt="ssh -i ~/Downloads/TrajektSports-Key3.pem ubuntu@trajektsports
 alias flake8="python3 -m flake8"
 # alias run_sourcedfact="docker-compose -f docker-compose.yml -p sourcedfact up -d"
 
-export BROWSER=/usr/bin/brave-beta
+export BROWSER=/usr/bin/chrome
 export COMPANIONHOME=/home/dweisdorf/repos/
 
 # # IMPORT TRAJEKT ENV VARIABLES
@@ -147,35 +144,6 @@ docker-bash() {
 alias db=docker-bash
 
 export GOOGLE_APPLICATION_CREDENTIALS=$HOME/repos/companion_keys/companion-project-354714-8e95cff3de8d.json
-
-export COMPANION_DEV_ENVIRONMENT=TRUE
-export COMPANION_WARM_UP_CACHE=FALSE
-
-# git aliases
-alias gco="git checkout"
-alias gcb="git checkout -b"
-alias gpo="git pull origin"
-
-
-stopwatch() {
-    # stopwatch command for contracting
-
-    journalPath=~/Documents/auto_timesheets/journal
-    echo "Starting work session at $(date)" | /usr/bin/tee -a $journalPath
-    start=$(date +%s)
-
-    notInterrupted=true
-    trap 'tput cnorm; notInterrupted=false' INT TERM
-    while [[ "${notInterrupted}" = "true" ]]; do
-        time="$(($(date +%s) - $start))"
-        printf '%s\r' "$(date -u -d "@$time" +%H:%M:%S)"
-        sleep 1
-    done
-
-    final="$(($(date +%s) - $start))"
-    echo "Finished work session at $(date)" | /usr/bin/tee -a $journalPath
-    echo "Total time: $(date -u -d "@$time" +%H:%M:%S)" | /usr/bin/tee -a $journalPath
-}
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

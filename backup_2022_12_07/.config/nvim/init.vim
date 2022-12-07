@@ -19,14 +19,7 @@ set signcolumn=yes:1
 set nu rnu
 set wildmode=longest,list   " get bash-like tab completions
 
-" if the current directory ends with sourcedfact, then set cc to 79, otherwise 88
-
-set cc=88
-if expand('%:p:h') =~ 'sourcedclaim' || expand('%:p:h') =~ 'sourcedarticle'
-    set cc=79
-endif
-
-"set cc=88                  " set an 88 column border for good coding style
+set cc=88                  " set an 88 column border for good coding style
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 filetype plugin indent on   "allow auto-indenting depending on file type
 syntax on                   " syntax highlighting
@@ -49,12 +42,7 @@ set statusline+=%F
 
 call plug#begin('~/.vim/plugged')
 
-" Does auto close tags when typing HTML
-Plug 'alvan/vim-closetag'
-
 Plug 'machakann/vim-highlightedyank'
-
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 
 "fuzzy search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -66,10 +54,6 @@ Plug 'nvim-lua/plenary.nvim'  " dependency
 Plug 'ThePrimeagen/harpoon'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 
-
-" show current context line at top
-Plug 'nvim-treesitter/nvim-treesitter-context'
-
 " gutentags automatically retriggers ctags as a file gets saved.
 " Plug 'ludovicchabant/vim-gutentags'
 
@@ -79,10 +63,8 @@ Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " I wanted to try this plugin, but it requires the prerelease version of nvim
-" As of Dec 2022, I don't really use this for jumping anymore
-" Plug 'tpope/vim-repeat'
-" Plug 'ggandor/lightspeed.nvim'
-" Plug 'ggandor/leap.nvim'
+Plug 'tpope/vim-repeat'
+Plug 'ggandor/lightspeed.nvim'
 
 " For grepping through a project without leaving vim.
 " Plug 'jremmen/vim-ripgrep'
@@ -96,38 +78,36 @@ Plug 'vim-utils/vim-man'
 " highlighting / syntax / linting for a huge num of languages and filetypes
 "Plug 'sheerun/vim-polyglot'
 
-" color scheme(s)
+" color scheme
 Plug 'gruvbox-community/gruvbox'
-Plug 'catppuccin/nvim', {'as': 'catppuccin'}
 
 " selecting line in github.
 Plug 'ruanyl/vim-gh-line'
 
 "auto complete using github copilot.
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 
 call plug#end()
 
 
-" colorscheme gruvbox
-" set background=dark
-let g:catppuccin_flavour = "mocha"
-colorscheme catppuccin
+colorscheme gruvbox
+set background=dark
 
+" Setup for gutentags
+"   Ignore folders that we don't want to index.
+let g:gutentags_ctags_exclude = [
+        \ '**/node_modules/**', '**/ClarityNLP/**', '**/env/**',
+        \ '**/__pycache__/**', '**/*.pyc' ,
+        \ '**/env/**','**/.git/**',
+        \ '**/db.sqlite3',
+        \ ]
+let g:gutentags_ctags_extra_args = [ '--fields=+ln' ]
+let g:gutentags_background_update=1
 
-" " Setup for gutentags
-" "   Ignore folders that we don't want to index.
-" let g:gutentags_ctags_exclude = [
-"         \ '**/node_modules/**', '**/ClarityNLP/**', '**/env/**',
-"         \ '**/__pycache__/**', '**/*.pyc' ,
-"         \ '**/env/**','**/.git/**',
-"         \ '**/db.sqlite3',
-"         \ ]
-" let g:gutentags_ctags_extra_args = [ '--fields=+ln' ]
-" let g:gutentags_background_update=1
+" Clear highlighting on escape in normal mode
+" nnoremap <esc> :noh<return><esc>
+" nnoremap <esc>^[ <esc>^[
 
-" Leader + space will put(paste) without overwriting the put register
-" xnoremap("<leader>p", "\"_dP")
 
 "rg detects git root and uses git ignore
 if executable('rg')
@@ -176,9 +156,9 @@ nnoremap <C-k> <cmd>lua require('telescope.builtin').git_files()<cr>
 nnoremap <leader>ut :UndotreeToggle<CR>
 
 " go to definition, and similar with coc...
-nmap <silent> <C-]> <Plug>(coc-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " completion with coc
 " :h coc-completion-example
@@ -240,19 +220,3 @@ if !exists('##TextYankPost')
   xmap y <Plug>(highlightedyank)
   omap y <Plug>(highlightedyank)
 endif
-
-" Leader + space will put(paste) without overwriting the put register
-" Placed at bottom, something above might conflict?
-" Wasn't working until I moved it down
-xnoremap <Leader>p "_dP
-" xmap <Leader>y "+y
-
-" lua require('leap').set_default_keymaps()
-
-" auto tag closing with alvan/vim-closetag
-let g:closetag_filenames = '*.html,*.js,*.jsx'
-let g:closetag_filetypes = 'html,js,jsx'
-let g:closetag_regions = {
-    \ 'javascriptreact': 'jsxRegion',
-    \ }
-let g:closetag_shortcut = '>'
