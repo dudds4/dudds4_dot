@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd ~/repos/sourcedclaim/opentree/tree/static/article
+npm link article && npm run watch

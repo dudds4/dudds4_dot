@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+tmux new-session -s article_link -d
+tmux send-keys -t article_link '~/repos/dudds4_dot/bin/helpers/article-watch' C-m
+
+tmux new-session -s claim_link -d
+tmux send-keys -t claim_link '~/repos/dudds4_dot/bin/helpers/claim-watch' C-m

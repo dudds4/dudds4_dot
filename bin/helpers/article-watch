@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd ~/repos/sourcedarticle
+npm link && npm run start-sass
