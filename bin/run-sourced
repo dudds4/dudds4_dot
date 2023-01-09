@@ -1,7 +1,35 @@
 #!/usr/bin/env bash
 
-tmux new-session -s article_link -d
-tmux send-keys -t article_link '~/repos/dudds4_dot/bin/helpers/article-watch' C-m
 
-tmux new-session -s claim_link -d
-tmux send-keys -t claim_link '~/repos/dudds4_dot/bin/helpers/claim-watch' C-m
+
+if ! tmux has-session -t=article_link 2> /dev/null; then
+    tmux new-session -s article_link -d
+    tmux send-keys -t article_link 'cd ~/repos/sourcedarticle' C-m
+    tmux send-keys -t article_link 'nvm use default' C-m
+    tmux send-keys -t article_link 'npm link && npm run start-sass' C-m
+fi
+
+if ! tmux has-session -t=claim_link 2> /dev/null; then
+    tmux new-session -s claim_link -d
+    tmux send-keys -t claim_link 'cd ~/repos/sourcedclaim/opentree/tree/static/article/' C-m
+    tmux send-keys -t claim_link 'nvm use default' C-m
+    tmux send-keys -t claim_link 'npm link article && npm run watch' C-m
+fi
+
+if ! tmux has-session -t=claim_logs 2> /dev/null; then
+    tmux new-session -s claim_logs -d
+    tmux send-keys -t claim_logs 'cd ~/repos/sourcedclaim/' C-m
+    tmux send-keys -t claim_logs 'make run-server && docker logs sourcedfact-django_server-1 --follow ' C-m
+fi
+
+if ! tmux has-session -t=article 2> /dev/null; then
+    tmux new-session -s article -d
+    tmux send-keys -t article 'cd ~/repos/sourcedarticle' C-m
+fi
+
+if ! tmux has-session -t=claim 2> /dev/null; then
+    tmux new-session -s claim -d
+    tmux send-keys -t claim 'cd ~/repos/sourcedclaim' C-m
+fi
+
+tmux attach-session
