@@ -31,7 +31,7 @@ return require('packer').startup(function(use)
     }
 
 	-- color scheme(s)
-	use 'gruvbox-community/gruvbox'
+	-- use 'gruvbox-community/gruvbox'
     use({
         'rose-pine/neovim',
         as = 'rose-pine',
@@ -41,7 +41,7 @@ return require('packer').startup(function(use)
     })
 
     use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
-    use('nvim-treesitter/playground')
+    -- use('nvim-treesitter/playground')
 
     use('theprimeagen/harpoon')
     use('mbbill/undotree')
@@ -71,14 +71,14 @@ return require('packer').startup(function(use)
     }
 
     -- Does auto close tags when typing HTML
-    use 'alvan/vim-closetag'
+    -- use 'alvan/vim-closetag'
 
     -- allows me to start nvim in the browser to edit text.
-    use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
+    -- use { 'glacambre/firenvim', run = function() vim.fn['firenvim#install'](0) end }
 
 	-- selecting line in github.
-	use 'ruanyl/vim-gh-line'
+	-- use 'ruanyl/vim-gh-line'
 
-	use 'ggandor/leap.nvim'
+	-- use 'ggandor/leap.nvim'
 
 end)

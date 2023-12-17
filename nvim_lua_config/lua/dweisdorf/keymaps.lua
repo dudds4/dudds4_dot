@@ -44,18 +44,8 @@ function nnoremap(lhs, rhs)
     noremap("n", lhs, rhs)
 end
 
---- searching through project ---
-nnoremap(
-    "<leader>ps",
-    function()
-        require('telescope.builtin').grep_string({search = vim.fn.input("Grep For > ")})
-    end
-)
-nnoremap("<leader>fs", function() require('telescope.builtin').live_grep() end)
-
 --- navigating files ---
 nnoremap("<leader>f", function() require('harpoon.mark').add_file() end)
-nnoremap("<C-k>", function() require('telescope.builtin').git_files() end)
 nnoremap("<S-k>", function() require('harpoon.ui').toggle_quick_menu() end)
 
 -- undo tree
