@@ -1,23 +1,27 @@
 local lsp = require('lsp-zero')
+
 lsp.preset('recommended')
 lsp.set_preferences({set_lsp_keymaps = false})
 
-lsp.ensure_installed({
-	'pyright',
-	'tsserver',
-	'eslint',
-	'clangd',
-	'cmake',
-})
-
-
 local cmp = require('cmp')
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
-	['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-	['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-	['<C-y>'] = cmp.mapping.confirm({ select = true }),
-	['<C-Space>'] = cmp.mapping.complete(),
+local cmp_format = require('lsp-zero').cmp_format()
+local cmp_action = require('lsp-zero').cmp_action()
+
+cmp.setup({
+  mapping = cmp.mapping.preset.insert({
+    -- `Enter` key to confirm completion
+    ['<C-y>'] = cmp.mapping.confirm({select = true}),
+    ['<C-Space>'] = cmp.mapping.complete(),
+   	['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+   	['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+  }),
+  sources = {
+      { name = 'nvim_lsp'},
+      { name = 'luasnip'},
+      { name = 'buffer'},
+      { name = 'path'},
+  },
+  formatting = cmp_format,
 })
 
 -- enable keybinds specific to LSP server
@@ -55,3 +59,15 @@ end
 
 lsp.on_attach(on_attach)
 lsp.setup()
+
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+-- Replace the language servers listed here
+-- with the ones you want to install
+ensure_installed = { 'gopls', 'clangd', 'cmake' },
+handlers = {
+  lsp.default_setup,
+},
+})
+

@@ -20,13 +20,13 @@ vim.api.nvim_set_keymap("n", "<leader><S-l>", ":vertical resize +20<CR>", { nore
 
 -- -- I use a plugin to map '<leader>gl' to get a github link for the selected buffer
 -- -- Disable other mappings to avoid pollution
-vim.g.gh_line_map = '<leader>gl'
-vim.g.gh_line_map_default = 0
-vim.g.gh_line_blame_map_default = 0
-vim.g.gh_open_command = 'fn() { echo --$@-- | xsel -b; }; fn '
+-- vim.g.gh_line_map = '<leader>gl'
+-- vim.g.gh_line_map_default = 0
+-- vim.g.gh_line_blame_map_default = 0
+-- vim.g.gh_open_command = 'fn() { echo --$@-- | xsel -b; }; fn '
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+-- vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+-- vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
@@ -44,9 +44,53 @@ function nnoremap(lhs, rhs)
     noremap("n", lhs, rhs)
 end
 
+--- searching through project ---
+nnoremap(
+    "<leader>ps",
+    function()
+        require('telescope.builtin').grep_string({search = vim.fn.input("Grep For > ")})
+    end
+)
+nnoremap("<leader>fs", function() require('telescope.builtin').live_grep() end)
+
 --- navigating files ---
 nnoremap("<leader>f", function() require('harpoon.mark').add_file() end)
+nnoremap("<C-k>", function() require('telescope.builtin').git_files() end)
 nnoremap("<S-k>", function() require('harpoon.ui').toggle_quick_menu() end)
 
 -- undo tree
 nnoremap("<leader>ut", ":UndotreeToggle<CR>")
+
+
+
+local ls = require("luasnip")
+-------------------- luasnips --------------------
+--
+-- keymap for jumping forwards
+vim.keymap.set({"i", "s"}, "<C-k>", function()
+    print("hell world")
+       if ls.expand_or_jumpable() then
+           print("Expandable or jumpable")
+           ls.expand_or_jump()
+       else
+           print("Not expandable or jumpable")
+       end
+end, { silent = true })
+
+-- keymap for jumping backwards
+vim.keymap.set({"i", "s"}, "<C-j>", function()
+    if ls.jumpable(-1) then
+        ls.jump()
+    end
+end, { silent = true })
+
+-- keymap for jumping backwards
+vim.keymap.set("i", "<C-l>", function()
+    if ls.choice_active() then
+        ls.change_choice(1)
+    end
+end)
+
+
+-- shortcut to source
+vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>")

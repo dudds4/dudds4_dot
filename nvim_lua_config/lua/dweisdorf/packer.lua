@@ -24,9 +24,8 @@ vim.cmd [[
 return require('packer').startup(function(use)
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
-    use { 
-        'nvim-telescope/telescope.nvim', tag = '0.1.0', 
-        -- or                            , branch = '0.1.x',
+    use {
+        'nvim-telescope/telescope.nvim', tag = '0.1.5',
         requires = { {'nvim-lua/plenary.nvim'} }
     }
 
@@ -41,11 +40,19 @@ return require('packer').startup(function(use)
     })
 
     use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
-    -- use('nvim-treesitter/playground')
+    use('nvim-treesitter/playground')
 
     use('theprimeagen/harpoon')
     use('mbbill/undotree')
     use('tpope/vim-fugitive')
+
+    use({
+        "L3MON4D3/LuaSnip",
+        -- follow latest release.
+        tag = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        -- install jsregexp (optional!:).
+        run = "make install_jsregexp"
+    })
 
     use {
         'VonHeikemen/lsp-zero.nvim',
