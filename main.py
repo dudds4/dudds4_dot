@@ -1,17 +1,22 @@
 import os
 import shutil
 import fire
+import glob
 
 DOT_FILES = [
     "~/.xinitrc",
     "~/.i3/config",
     "~/.config/i3status.toml",
     "~/.vimrc",
-    "~/.config/nvim/init.lua",
-    "~/.config/nvim/lua/plugins.lua",
-    "~/.config/nvim/lua/keymaps.lua",
+    # nvim lua configs
+    "~/.config/nvim/*.lua",
+    "~/.config/nvim/lua/**/*.lua",
+    "~/.config/nvim/plugin/**/*.lua",
+    "~/.config/nvim/after/**/*.lua",
+    # bash
     "~/.bashrc",
     "~/.zshrc",
+    # terminal
     "~/.config/alacritty/alacritty.yml",
     "~/.config/kitty/kitty.conf",
     "~/.config/kitty/current-theme.conf",
@@ -27,28 +32,36 @@ def save(save_folder: str, dry_run: bool = True, is_backup: bool = False) -> Non
             src = src[2:]
 
         home = os.environ.get("HOME")
-        full_src = os.path.join(home, src)
-        if not os.path.exists(full_src):
-            if not is_backup:
-                print(f"DOT file not found at {full_src}")
-            continue
+        retargeted_src = os.path.join(home, src)
 
-
-        dst = os.path.join(
-            save_folder,
-            src,
-        )
-
-        if is_backup:
-            print(f"DOT file found at {full_src}, backing up")
-
-        if dry_run:
-            print(f"[DRY RUN] Copying file from {full_src} -> {dst}")
+        if "*" in retargeted_src:
+            found_files = glob.glob(retargeted_src)
         else:
-            print(f"Copying file from {full_src} -> {dst}")
-            containing_dir, _ = os.path.split(dst)
-            os.makedirs(containing_dir, exist_ok=True)
-            shutil.copyfile(full_src, dst)
+            found_files = [retargeted_src]
+
+        for full_src in found_files:
+
+            if not os.path.exists(full_src):
+                if not is_backup:
+                    print(f"DOT file not found at {full_src}")
+                continue
+
+            home_prefix_len = len(os.path.join(home, ""))
+            dst = os.path.join(
+                save_folder,
+                full_src[home_prefix_len:],
+            )
+
+            if is_backup:
+                print(f"DOT file found at {full_src}, backing up")
+
+            if dry_run:
+                print(f"[DRY RUN] Copying file from {full_src} -> {dst}")
+            else:
+                print(f"Copying file from {full_src} -> {dst}")
+                containing_dir, _ = os.path.split(dst)
+                os.makedirs(containing_dir, exist_ok=True)
+                shutil.copyfile(full_src, dst)
 
 def deploy(saved_folder: str, backup_folder: str, dry_run: bool = True) -> None:
     """Deploys dot files from the save folder. Backs up existing files to the backup folder"""
